@@ -12,10 +12,12 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Install unzip
-      run: sudo apt-get install unzip
+      run: sudo apt-get update && sudo apt-get install -y unzip
 
     - name: Unzip project
-      run: unzip Mgcsolutes.zip -d project
+      run: |
+        unzip -o Mgcsolutes.zip -d project
+        ls -l project
 
     - name: Set up JDK 17
       uses: actions/setup-java@v3
