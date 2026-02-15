@@ -1,4 +1,4 @@
-name: Build Android AAB
+name: Build Android AAB from ZIP
 
 on:
   push:
@@ -11,17 +11,26 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Install unzip
+      run: sudo apt-get install unzip
+
+    - name: Unzip project
+      run: unzip Mgcsolutes.zip -d project
+
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Build with Gradle
-      run: ./gradlew bundleRelease
+    - name: Grant execute permission
+      run: chmod +x project/gradlew
+
+    - name: Build AAB
+      run: ./project/gradlew -p project bundleRelease
 
     - name: Upload AAB
       uses: actions/upload-artifact@v3
       with:
         name: app-release
-        path: app/build/outputs/bundle/release/app-release.aab
+        path: project/app/build/outputs/bundle/release/app-release.aab
